@@ -3,7 +3,7 @@ from pygame.locals import *
 import time
 
 # Initializing global variables
-XO = 'x'
+turn = 'x'
 winner = None
 draw = False
 width, height = 400, 400
@@ -48,7 +48,7 @@ def draw_status():
     global draw
 
     if winner is None:
-        message = XO.upper() + "'s turn"
+        message = turn.upper() + "'s turn"
     else:
         message = winner.upper() + " won!"
     if draw:
@@ -83,14 +83,15 @@ def check_win():
                             ((col+1)*width/3-width/6, height), 4)
             break
 
-    # Check for diagonal winners
+    # Check for diagonal winners 
+    # left --> right
     if (TTT[0][0] == TTT[1][1] == TTT[2][2]) and (TTT[0][0] is not None):
         winner = TTT[0][0]
-        pg.draw.line(screen, (255, 70, 70), (50, 50), (350, 350), 4)
-
+        pg.draw.line (screen, (250,70,70), (50, 50), (350, 350), 4)
+    # right --> left
     if (TTT[0][2] == TTT[1][1] == TTT[2][0]) and (TTT[0][2] is not None):
         winner = TTT[0][2]
-        pg.draw.line(screen, (255, 70, 70), (50, 50), (350, 350), 4)
+        pg.draw.line(screen, (255, 70, 70), (350, 50), (50, 350), 4)
 
     if (all([all(row) for row in TTT]) and winner is None):
         draw = True
@@ -98,7 +99,7 @@ def check_win():
     draw_status()
 
 def draw_XO(row, col):
-    global TTT, XO
+    global TTT, turn
 
     if row == 1:
         posx = 30
@@ -114,17 +115,17 @@ def draw_XO(row, col):
     if col == 3:
         posy = 2 * height / 3 + 30
      
-    TTT[row - 1][col - 1] = XO
-    if XO == 'x':
+    TTT[row - 1][col - 1] = turn
+    if turn == 'x':
         screen.blit(x_img, (posy, posx))
-        XO = 'o'
+        turn = 'o'
     else:
         screen.blit(o_img, (posy, posx))
-        XO = 'x'
+        turn = 'x'
     
     pg.display.update()
 
-def user_click():
+def check_user_click():
     # Getting coordinates of mouse click
     x, y = pg.mouse.get_pos()
 
@@ -149,14 +150,14 @@ def user_click():
         row = None
         
     if row and col and TTT[row-1][col-1] is None:
-        global XO
+        global turn
 
         # Draw X or O on the screen
         draw_XO(row, col)
         check_win()
 
 def reset_game():
-    global TTT, winner, XO, draw
+    global TTT, winner, turn, draw
     time.sleep(3)
     XO = 'x'
     draw = False
@@ -164,20 +165,26 @@ def reset_game():
     winner = None
     TTT = [[None]*3, [None]*3, [None]*3]
 
-game_opening()
-
-# Run the game loop forever
-while(True):
+def check_events():
+    # watch for mouse events
     for event in pg.event.get():
         if event.type == QUIT:
             pg.quit()
             sys.exit()
+        elif event.type == pg.KEYDOWN:
+            if event.key == pg.K_q:
+                pg.quit()
+                sys.exit()
         elif event.type == MOUSEBUTTONDOWN:
-            user_click()
+            check_user_click()
             if (winner or draw):
                 reset_game()
-    
+
+# Start the game
+game_opening()
+
+# Run the main loop for the game forever
+while(True):
+    check_events()    
     pg.display.update()
     CLOCK.tick(fps)
-
-    
