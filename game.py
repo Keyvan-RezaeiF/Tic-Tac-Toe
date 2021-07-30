@@ -155,6 +155,14 @@ def user_click():
         draw_XO(row, col)
         check_win()
 
+def reset_game():
+    global TTT, winner, XO, draw
+    time.sleep(3)
+    XO = 'x'
+    draw = False
+    game_opening()
+    winner = None
+    TTT = [[None]*3, [None]*3, [None]*3]
 
      
 
