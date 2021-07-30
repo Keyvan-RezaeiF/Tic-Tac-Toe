@@ -96,4 +96,34 @@ def check_win():
         draw = True
     
     draw_status()
+
+def draw_XO(row, col):
+    global TTT, XO
+
+    if row == 1:
+        posx = 30
+    if row == 2:
+        posx = width / 3 + 30
+    if row == 3:
+        posx = 2 * width / 3 + 30
+
+    if col == 1:
+        posy = 30
+    if col == 2:
+        posy = height / 3 + 30
+    if col == 3:
+        posy = 2 * height / 3 + 30
+     
+    TTT[row - 1][col - 1] = XO
+    if XO == 'x':
+        screen.blit(x_img, (posy, posx))
+        XO = 'o'
+    else:
+        screen.blit(o_img, (posy, posx))
+        XO = 'x'
+    
+    pg.display.update()
+    
+     
+
     
