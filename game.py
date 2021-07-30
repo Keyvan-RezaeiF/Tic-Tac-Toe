@@ -123,7 +123,39 @@ def draw_XO(row, col):
         XO = 'x'
     
     pg.display.update()
-    
+
+def user_click():
+    # Getting coordinates of mouse click
+    x, y = pg.mouse.get_pos()
+
+    # Getting column of mouse click
+    if x < width/3:
+        col = 1
+    elif x < 2 * width / 3:
+        col = 2
+    elif x < width:
+        col = 3
+    else:
+        col = None
+
+    # Getting row of mouse click
+    if y < height/3:
+        row = 1
+    elif y < 2 * height / 3:
+        row = 2
+    elif y < height:
+        row = 3
+    else:
+        row = None
+        
+    if row and col and TTT[row-1][col-1] is None:
+        global XO
+
+        # Draw X or O on the screen
+        draw_XO(row, col)
+        check_win()
+
+
      
 
     
