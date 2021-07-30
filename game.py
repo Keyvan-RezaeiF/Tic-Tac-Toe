@@ -164,6 +164,20 @@ def reset_game():
     winner = None
     TTT = [[None]*3, [None]*3, [None]*3]
 
-     
+game_opening()
+
+# Run the game loop forever
+while(True):
+    for event in pg.event.get():
+        if event.type == QUIT:
+            pg.quit()
+            sys.exit()
+        elif event.type == MOUSEBUTTONDOWN:
+            user_click()
+            if (winner or draw):
+                reset_game()
+    
+    pg.display.update()
+    CLOCK.tick(fps)
 
     
