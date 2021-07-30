@@ -44,6 +44,23 @@ def game_opening():
     pg.draw.line(screen, line_color, (0, 2 * height / 3), (width, 2 * height / 3), 7)
     draw_status()
 
+def draw_status():
+    global draw
 
+    if winner is None:
+        message = XO.upper() + "'s turn"
+    else:
+        message = winner.upper() + " won!"
+    if draw:
+        message = "Game draw!"
+
+    font = pg.font.Font(None, 30)
+    text = font.render(message, 1, (255, 255, 255))
+
+    # Copy the rendered message onto the board
+    screen.fill((0, 0, 0), (0, 400, 500, 100))
+    text_rect = text.get_rect(center=(width/2, 500-50))
+    screen.blit(text, text_rect)
+    pg.display.update()
 
     
